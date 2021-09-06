@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
+#include <string.h>
 
 int nlatt, vlatt;
 float ran2(long *idum);
@@ -24,6 +25,12 @@ nlatt = 10;
 vlatt = 100;
 int npp[nlatt],nmm[nlatt];
 int **field = (int**)malloc(nlatt*sizeof(int*));
+float beta_min, beta_max, b;
+char c[300]; 
+    char* extension = ".txt";
+    char fileSpec[strlen(c)+strlen(extension)+1];
+    FILE *out;
+
 for(i=0;i<nlatt;i++){
 
 
@@ -59,17 +66,32 @@ for(i=0;i<nlatt;i++){
 					
 
 	*/
+beta_min = 0.35;
+beta_max = 0.46;
+int k;
+for(k=0;k<3;k++){
+    b = beta_min + (beta_max - beta_min)*k;	
+    sprintf(c,"%lf",b);
+    printf("%s",c);
+    snprintf( fileSpec, sizeof( fileSpec ), "%s%s", c, extension );
+
+    out = fopen( fileSpec, "w" );
+    
+    
+    
+
 for(i=0;i<measures;i++){
 	for (j = 0; j < idecorrel; j++)
 	{
-		update_metropolis(field,npp,nmm,beta);
+		update_metropolis(field,npp,nmm,b);
 	}
 ene = energy(field,ene,npp,nmm,extfield);
 mag = magn(field,mag) ;	
-fprintf(myfile,"%d %lf %lf \n",i,ene,mag);
+fprintf(out,"%d %lf %lf \n",i,ene,mag);
 }
-
+}
 fclose(fp);
+fclose(out);
 fclose(myfile);
 return 0;
 }
