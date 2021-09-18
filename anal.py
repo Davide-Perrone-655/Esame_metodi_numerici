@@ -4,7 +4,8 @@ from bootstrap import boot_1 as bt
 from copy import deepcopy
 import matplotlib.pyplot as plt
 
-datas = ['20','30','40']
+datas = ['45','55']
+#datas = ['10','50', '60']
 datas_1 = ['20']
 res = {'ene' : {'val' : [], 'err' : [] }, 'mag': {'val' : [], 'err' : [] }, 'chi': {'val' : [], 'err' : [] }, 'cap': {'val' : [], 'err' : [] }}
 betas = {}
@@ -19,7 +20,7 @@ for i in datas:
     d = int(i)**2
     os.chdir('./'+ i)
     count = 0
-    #print(os.listdir())
+    print(os.listdir())
     for meas in os.listdir():
         betas[i].append(float(meas.strip('.dat').split('_')[2]))
 
@@ -39,16 +40,17 @@ for i in datas:
         #print(betas)
         count +=1
         print('Punto finito, %d', count)
+        print(meas)
     os.chdir('..')
     #print(betas[i])
     #print(res_2)
     file1 = open('res' + i + '.dat', 'w')
     file1.write('b\tene_v\tene_r\tmag_v\tmag_r\tchi_v\tchi_r\tcap_v\tcap_r\n')
     for j in range(len(betas[i])):
-        file1.write('{:.5f}\t'.format(betas[i][j]))
+        file1.write('{:.6f}\t'.format(betas[i][j]))
         for keys in res_2[i]:
             for keys_2 in res_2[i][keys]:
-                file1.write('{:.5f}\t'.format(res_2[i][keys][keys_2][j]))
+                file1.write('{:.6f}\t'.format(res_2[i][keys][keys_2][j]))
 
         file1.write('\n')
     file1.close()
